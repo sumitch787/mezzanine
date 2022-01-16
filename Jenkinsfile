@@ -36,7 +36,7 @@ pipeline {
         stage('SAST') {
           steps {
             sh '''mkdir bandit-report 
-bandit -r build/lib/ -f ./bandit-report/report.txt
+bandit -r build/lib/ -f txt -o ./bandit-report/report.txt
 cat ./bandit-report/bandit-report.txt '''
           }
         }
