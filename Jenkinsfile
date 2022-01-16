@@ -14,7 +14,7 @@ pipeline {
 
     stage('Lint') {
       steps {
-        sh 'tox -e package -e lint -e pyupgrade'
+        sh 'tox -e lint'
       }
     }
 
