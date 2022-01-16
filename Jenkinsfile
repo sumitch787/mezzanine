@@ -8,7 +8,6 @@ pipeline {
   stages {
     stage('Prep') {
       steps {
-        sh 'apt install git -y'
         sh 'python3 setup.py sdist'
       }
     }
