@@ -46,10 +46,15 @@ bandit -r build/lib/ -f txt -o ./bandit-report/report.txt --exit-zero
       }
     }
 
-    stage('Report') {
+    stage('Docker') {
+      agent {
+        docker {
+          image 'ubuntu:22.04'
+        }
+
+      }
       steps {
-        junit '**/*.xml'
-        archiveArtifacts(artifacts: 'build', onlyIfSuccessful: true)
+        sh 'ls -al'
       }
     }
 
