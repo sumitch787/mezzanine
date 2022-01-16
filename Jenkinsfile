@@ -9,6 +9,7 @@ pipeline {
     stage('Prep') {
       steps {
         sh 'python3 setup.py sdist'
+        sh 'pwd'
       }
     }
 
