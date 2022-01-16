@@ -1,18 +1,25 @@
 pipeline {
   agent {
-    docker {
-      image 'python-build:v1'
+    node {
+      label 'jenkins'
     }
 
   }
   stages {
     stage('Prep') {
+      agent {
+        docker {
+          image 'python-build:v1'
+        }
+
+      }
       steps {
         sh 'python3 setup.py sdist'
       }
     }
 
     stage('Lint') {
+      agent any
       steps {
         sh 'tox -e lint'
       }
