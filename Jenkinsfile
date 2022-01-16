@@ -19,7 +19,12 @@ pipeline {
     }
 
     stage('Lint') {
-      agent any
+      agent {
+        docker {
+          image 'python-build:v1'
+        }
+
+      }
       steps {
         sh 'tox -e lint'
       }
@@ -50,18 +55,6 @@ bandit -r build/lib/ -f txt -o ./bandit-report/report.txt --exit-zero
           }
         }
 
-      }
-    }
-
-    stage('Docker') {
-      agent {
-        docker {
-          image 'ubuntu:22.04'
-        }
-
-      }
-      steps {
-        sh 'ls -al'
       }
     }
 
