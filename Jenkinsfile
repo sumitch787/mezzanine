@@ -1,46 +1,9 @@
 pipeline {
   agent any
   stages {
-    stage('Prep') {
-      agent {
-        docker {
-          image 'python-build:v1'
-        }
-
-      }
-      steps {
-        sh 'python3 setup.py sdist'
-      }
-    }
-
-    stage('Lint') {
-      agent {
-        docker {
-          image 'python-build:v1'
-        }
-
-      }
-      steps {
-        sh 'tox -e lint'
-      }
-    }
-
-    stage('Build') {
-      agent {
-        docker {
-          image 'python-build:v1'
-        }
-
-      }
-      steps {
-        sh '''python3 setup.py build
-'''
-      }
-    }
-
-    stage('Test') {
+    stage('Checks') {
       parallel {
-        stage('Unit') {
+        stage('Prep') {
           agent {
             docker {
               image 'python-build:v1'
@@ -48,38 +11,33 @@ pipeline {
 
           }
           steps {
+            sh 'python3 setup.py sdist'
+          }
+        }
+
+        stage('Lint') {
+          steps {
+            sh 'tox -e lint'
+            milestone(ordinal: 1, label: 'lint')
+          }
+        }
+
+        stage('Unit-Tests') {
+          steps {
             sh 'tox -e py310-dj40'
+            milestone(ordinal: 2, label: 'Tests')
           }
         }
 
         stage('SAST') {
-          agent {
-            docker {
-              image 'python-build:v1'
-            }
-
-          }
           steps {
             sh 'mkdir bandit-report '
-            sh '''
-bandit -r build/lib/ -f txt -o ./bandit-report/report.txt --exit-zero
-'''
+            sh 'bandit -r build/lib/ -f txt -o ./bandit-report/report.txt --exit-zero'
             sh 'cat ./bandit-report/report.txt '
+            milestone(ordinal: 3, label: 'SAST')
           }
         }
 
-      }
-    }
-
-    stage('Report') {
-      agent {
-        docker {
-          image 'python-build:v1'
-        }
-
-      }
-      steps {
-        junit 'junit/*.xml'
       }
     }
 
