@@ -20,8 +20,7 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh '''python3 setup.py install
-python3 setup.py build
+        sh '''python3 setup.py build
 '''
       }
     }
