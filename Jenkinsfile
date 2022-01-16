@@ -29,13 +29,13 @@ pipeline {
       parallel {
         stage('Unit') {
           steps {
-            sh 'tox -e package -e lint -e pyupgrade'
+            sh 'tox -e py310-dj40'
           }
         }
 
         stage('SAST') {
           steps {
-            sh 'bandit '
+            sh 'bandit -r build/lib/'
           }
         }
 
