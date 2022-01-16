@@ -16,6 +16,12 @@ pipeline {
         }
 
         stage('Lint') {
+          agent {
+            docker {
+              image 'python-build:v1'
+            }
+
+          }
           steps {
             sh 'tox -e lint'
             milestone(ordinal: 1, label: 'lint')
@@ -23,6 +29,12 @@ pipeline {
         }
 
         stage('Unit-Tests') {
+          agent {
+            docker {
+              image 'python-build:v1'
+            }
+
+          }
           steps {
             sh 'tox -e py310-dj40'
             milestone(ordinal: 2, label: 'Tests')
@@ -30,6 +42,12 @@ pipeline {
         }
 
         stage('SAST') {
+          agent {
+            docker {
+              image 'python-build:v1'
+            }
+
+          }
           steps {
             sh 'mkdir bandit-report '
             sh 'bandit -r build/lib/ -f txt -o ./bandit-report/report.txt --exit-zero'
