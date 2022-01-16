@@ -1,30 +1,20 @@
 pipeline {
   agent {
-    node {
-      label 'jenkins'
+    docker {
+      image 'python-build:v1'
     }
 
   }
   stages {
     stage('Prep') {
-      agent {
-        docker {
-          image 'python-build:v1'
-        }
-
-      }
+      agent any
       steps {
         sh 'python3 setup.py sdist'
       }
     }
 
     stage('Lint') {
-      agent {
-        docker {
-          image 'python-build:v1'
-        }
-
-      }
+      agent any
       steps {
         sh 'tox -e lint'
       }
@@ -55,6 +45,12 @@ bandit -r build/lib/ -f txt -o ./bandit-report/report.txt --exit-zero
           }
         }
 
+      }
+    }
+
+    stage('Report') {
+      steps {
+        junit 'junit/*.xml'
       }
     }
 
