@@ -1,13 +1,13 @@
 pipeline {
-  agent {
-    docker {
-      image 'python-build:v1'
-    }
-
-  }
+  agent any
   stages {
     stage('Prep') {
-      agent any
+      agent {
+        docker {
+          image 'python-build:v1'
+        }
+
+      }
       steps {
         sh 'python3 setup.py sdist'
       }
@@ -51,6 +51,18 @@ bandit -r build/lib/ -f txt -o ./bandit-report/report.txt --exit-zero
     stage('Report') {
       steps {
         junit 'junit/*.xml'
+      }
+    }
+
+    stage('') {
+      agent {
+        docker {
+          image 'ubuntu:22.04'
+        }
+
+      }
+      steps {
+        sh 'echo "Hello"'
       }
     }
 
