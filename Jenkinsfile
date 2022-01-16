@@ -37,7 +37,7 @@ pipeline {
           steps {
             sh '''mkdir bandit-report 
 bandit -r build/lib/ -f txt -o ./bandit-report/report.txt
-cat ./bandit-report/bandit-report.txt '''
+cat ./bandit-report/report.txt '''
           }
         }
 
