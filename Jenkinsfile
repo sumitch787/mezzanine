@@ -46,10 +46,10 @@ bandit -r build/lib/ -f txt -o ./bandit-report/report.txt --exit-zero
       }
     }
 
-    stage('Publish report') {
+    stage('Report') {
       steps {
-        junit 'junit/*.xml'
-        sh 'ls -al'
+        junit '**/*.xml'
+        archiveArtifacts(artifacts: 'build', onlyIfSuccessful: true)
       }
     }
 
