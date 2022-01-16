@@ -1,12 +1,14 @@
 pipeline {
-  agent none
+  agent {
+    docker {
+      image 'ubuntu:22.04'
+    }
+
+  }
   stages {
     stage('Linting') {
       steps {
-        dockerNode(image: 'ubuntu:22.04') {
-          sh 'echo "Hello From Docker Inside"'
-        }
-
+        sh 'echo "Using Docker"'
       }
     }
 
